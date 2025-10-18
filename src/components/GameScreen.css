@@ -1,0 +1,586 @@
+.game-screen {
+  min-height: 100vh;
+  height: 100vh;
+  background:
+    radial-gradient(circle at 12% 88%, rgba(102, 126, 234, 0.4) 0%, transparent 65%),
+    radial-gradient(circle at 88% 12%, rgba(240, 147, 251, 0.35) 0%, transparent 60%),
+    radial-gradient(circle at 45% 55%, rgba(76, 175, 80, 0.2) 0%, transparent 70%),
+    radial-gradient(circle at 75% 25%, rgba(255, 215, 0, 0.15) 0%, transparent 55%),
+    linear-gradient(145deg, #050510 0%, #0f0f23 20%, #1a1a2e 40%, #16213e 60%, #0f3460 80%, #533483 100%);
+  padding: 16px 20px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+  backdrop-filter: brightness(1.1) contrast(1.15);
+}
+
+.game-screen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 25% 75%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 25%, rgba(240, 147, 251, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.06) 0%, transparent 60%);
+  animation: ambientGlow 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes ambientGlow {
+  0% { 
+    opacity: 0.4;
+    filter: blur(30px);
+  }
+  100% { 
+    opacity: 0.8;
+    filter: blur(40px);
+  }
+}
+
+.game-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.04"><circle cx="30" cy="30" r="1"/><circle cx="10" cy="10" r="0.5"/><circle cx="50" cy="50" r="0.5"/></g></svg>') repeat;
+  animation: constellation 30s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes constellation {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-60px, -60px) rotate(360deg); }
+}
+
+.game-screen.loading,
+.game-screen.waiting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-content,
+.waiting-content {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-left-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.waiting-animation {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.waiting-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.game-header { display:flex; justify-content:space-between; align-items:center; margin:0 0 10px 0; padding:10px 18px; background:rgba(255,255,255,0.08); backdrop-filter:blur(14px) saturate(160%); border-radius:14px; border:1px solid rgba(255,255,255,0.25); box-shadow:0 6px 24px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.15); height:58px; }
+
+.game-title { font-size:24px; font-weight:800; background:linear-gradient(90deg,#fff,#ffe6c7 45%,#ffd86b 60%,#ffffff 85%); -webkit-background-clip:text; background-clip:text; color:transparent; margin:0; letter-spacing:1.5px; text-shadow:0 6px 22px rgba(0,0,0,.45); }
+
+.game-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-badge {
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.status-badge.waiting {
+  background: #ff9800;
+  color: white;
+}
+
+.status-badge.active {
+  background: #4caf50;
+  color: white;
+}
+
+.status-badge.completed {
+  background: #9c27b0;
+  color: white;
+}
+
+.game-layout-scale { position:relative; width:100%; height:calc(100vh - 58px - 20px); /* header + padding */ display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.game-layout-scale.scaled { transform:scale(var(--ui-scale)); transform-origin: top center; }
+.game-layout { display:grid; grid-template-columns: 1.05fr 1.05fr 240px 250px; gap:10px; width:100%; height:100%; max-width:100%; }
+
+/* Compact panel styling */
+
+.left-panel, .center-panel, .right-panel, .claims-panel-section { background:rgba(255,255,255,0.07); border-radius:14px; padding:8px 10px 10px; backdrop-filter:blur(18px) saturate(160%); border:1px solid rgba(255,255,255,0.2); box-shadow:0 8px 28px -14px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.12); position:relative; z-index:1; display:flex; flex-direction:column; overflow:hidden; min-height:0; }
+
+.right-panel { display:flex; flex-direction:column; gap:8px; }
+
+/* Force inner scroll removal & compact children heights */
+.right-panel > * { flex:0 0 auto; }
+
+/* Adjust inner component spacing */
+.players-list { margin:0; }
+.players-list h3, .player-scores h3, .claims-panel h3 { font-size:12px !important; margin-bottom:6px !important; letter-spacing:1px; }
+
+/* Ticket & board compress adjustments */
+.player-ticket .ticket-header h2, .tambola-board .board-header h2 { font-size:14px !important; }
+.ticket-grid { padding:10px !important; gap:6px !important; }
+.ticket-row { gap:4px !important; }
+.ticket-cell { font-size:11px !important; min-height:30px !important; }
+.numbers-grid { gap:2px !important; padding:4px !important; }
+.current-number { width:68px !important; height:68px !important; font-size:28px !important; }
+.board-stats { margin:8px 0 6px 0 !important; padding:6px 8px !important; }
+.recent-numbers { margin-top:4px !important; }
+.recent-number { width:24px !important; height:24px !important; font-size:11px !important; }
+
+/* Claims compression */
+.claims-container { gap:6px !important; margin-bottom:8px !important; }
+.claim-card { padding:12px 10px 10px !important; min-height:70px !important; }
+.claim-name { font-size:12px !important; }
+.claim-description { font-size:10px !important; }
+.hover-claim-button { padding:6px 12px !important; font-size:10px !important; }
+.winners-info .winner-info { padding:4px 6px !important; }
+.winner-name { font-size:12px !important; }
+.claims-info { padding:10px !important; font-size:10px !important; }
+.info-item { margin-bottom:6px !important; }
+
+/* Mini status badge tighten */
+.status-badge { padding:8px 14px; font-size:11px; letter-spacing:.5px; }
+
+/* Hide overflow globally inside scaling to prevent scrollbars */
+body, html { overflow:hidden; }
+
+.game-complete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.game-complete-content {
+  background: white;
+  color: #333;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.game-complete-content h2 {
+  margin: 0 0 30px 0;
+  font-size: 28px;
+}
+
+.overall-winner {
+  background: linear-gradient(135deg, #ffd700, #ffb347);
+  color: #333;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.overall-winner h3 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.winner-score {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.final-scores {
+  margin-bottom: 25px;
+}
+
+.final-scores h4, .pattern-winners h4 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #555;
+}
+
+.scores-list {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.score-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.score-item:last-child {
+  margin-bottom: 0;
+}
+
+.score-item.first-place {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  border: 2px solid #ffd700;
+}
+
+.rank {
+  font-weight: bold;
+  color: #666;
+  min-width: 30px;
+}
+
+.score-item.first-place .rank {
+  color: #b8860b;
+}
+
+.player-name {
+  flex: 1;
+  text-align: left;
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.score {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.pattern-winners {
+  margin-bottom: 25px;
+}
+
+.final-winners {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.winner-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.winner-item:last-child {
+  margin-bottom: 0;
+}
+
+.pattern {
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #555;
+}
+
+.winner {
+  font-size: 18px;
+}
+
+.back-to-lobby-btn {
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.back-to-lobby-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Desktop to Tablet */
+@media (max-width: 1200px) { 
+  .game-layout { 
+    grid-template-columns: 1fr 1fr; 
+    grid-auto-rows: minmax(0,1fr); 
+    gap: 12px;
+  } 
+}
+
+/* Tablet */
+@media (max-width: 930px) { 
+  .game-layout { 
+    grid-template-columns: 1fr; 
+    height: auto; 
+    gap: 15px;
+  }
+  .game-layout-scale { 
+    height: auto; 
+    transform: none !important; 
+  }
+  body, html { overflow: auto; }
+  
+  .game-screen {
+    padding: 12px;
+  }
+}
+
+/* Mobile Landscape */
+@media (max-width: 768px) {
+  /* Enable scrolling on mobile */
+  body, html { 
+    overflow: auto !important; 
+  }
+  
+  .game-screen {
+    padding: 8px;
+    font-size: 14px;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .game-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    padding: 12px;
+  }
+  
+  .game-title {
+    font-size: 22px;
+    margin: 0;
+  }
+  
+  .game-status {
+    justify-content: center;
+  }
+  
+  .status-badge {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  
+  .start-game-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .game-layout {
+    gap: 12px;
+  }
+  
+  .left-panel,
+  .center-panel,
+  .right-panel,
+  .claims-panel-section {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  
+  .right-panel {
+    flex-direction: column;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 640px) {
+  /* Ensure scrolling is available */
+  body, html { 
+    overflow: auto !important; 
+  }
+  
+  .game-screen {
+    padding: 6px;
+    font-size: 13px;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .game-header {
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .game-title {
+    font-size: 20px;
+  }
+  
+  .status-badge {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+  
+  .start-game-btn {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  
+  .game-layout-scale {
+    height: auto;
+    align-items: flex-start;
+  }
+  
+  .game-layout { 
+    grid-template-columns: 1fr; 
+    gap: 10px; 
+    align-content: start;
+    height: auto;
+  }
+  
+  .left-panel, 
+  .center-panel, 
+  .right-panel, 
+  .claims-panel-section { 
+    padding: 10px; 
+    border-radius: 10px;
+  }
+  
+  .left-panel { 
+    flex: 0 0 auto; 
+    height: auto; 
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  /* Ensure scrolling is available */
+  body, html { 
+    overflow: auto !important; 
+  }
+  
+  .game-screen {
+    padding: 4px;
+    font-size: 12px;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .game-header {
+    padding: 6px;
+    gap: 6px;
+  }
+  
+  .game-title {
+    font-size: 18px;
+  }
+  
+  .status-badge {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+  
+  .start-game-btn {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .game-layout {
+    gap: 8px;
+  }
+  
+  .left-panel,
+  .center-panel,
+  .right-panel,
+  .claims-panel-section {
+    padding: 8px;
+    border-radius: 8px;
+  }
+  
+  /* Stack panels vertically on small screens */
+  .game-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Order panels for mobile */
+  .center-panel {
+    order: 1; /* Player ticket first */
+  }
+  
+  .left-panel {
+    order: 2; /* Number board second */
+  }
+  
+  .right-panel {
+    order: 3; /* Players list third */
+  }
+  
+  .claims-panel-section {
+    order: 4; /* Claims last */
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  /* Ensure scrolling is available */
+  body, html { 
+    overflow: auto !important; 
+  }
+  
+  .game-screen {
+    padding: 3px;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .game-title {
+    font-size: 16px;
+  }
+  
+  .game-layout {
+    gap: 6px;
+  }
+  
+  .left-panel,
+  .center-panel,
+  .right-panel,
+  .claims-panel-section {
+    padding: 6px;
+  }
+}
