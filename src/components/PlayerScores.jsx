@@ -1,112 +1,104 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Crown, Star, Trophy } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Crown, Trophy, Star, Users } from 'lucide-react';
 import './PlayerScores.css';
 
-const PlayerScores = ({ players, currentPlayer, winners }) => {
-  // Get all players with their scores
-  const playersWithScores = players?.map(player => {
-    // Calculate total score from winners
+// Compute total score for each player from winners map
+function computeScores(players, winners) {
+  return (players || []).map(player => {
     let totalScore = 0;
     Object.values(winners || {}).forEach(winner => {
       if (Array.isArray(winner)) {
-        winner.forEach(w => {
-          if (w.playerId === player.id) {
-            totalScore += w.score || 0;
-          }
-        });
+        winner.forEach(w => { if (w.playerId === player.id) totalScore += w.score || 0; });
       } else if (winner?.playerId === player.id) {
         totalScore += winner.score || 0;
       }
     });
-    
-    return {
-      ...player,
-      totalScore
-    };
-  }).sort((a, b) => b.totalScore - a.totalScore) || [];
+    return { ...player, totalScore };
+  }).sort((a, b) => b.totalScore - a.totalScore);
+}
 
-  // Get player ranking
-  const getPlayerRank = (playerScore, index) => {
-    if (index === 0 && playerScore > 0) return 'first';
-    if (index === 1 && playerScore > 0) return 'second';
-    if (index === 2 && playerScore > 0) return 'third';
-    return 'regular';
-  };
+const RANK_CONFIG = {
+  0: { icon: <Crown size={13} />, label: 'gold',   color: '#ffd700' },
+  1: { icon: <Trophy size={13} />, label: 'silver', color: '#c0c0c0' },
+  2: { icon: <Star size={13} />,  label: 'bronze', color: '#cd7f32' }
+};
 
-  // Get rank icon
-  const getRankIcon = (rank) => {
-    switch (rank) {
-      case 'first': return <Crown size={14} />;
-      case 'second': return <Trophy size={14} />;
-      case 'third': return <Star size={14} />;
-      default: return null;
-    }
-  };
+const PlayerScores = ({ players, currentPlayer, winners }) => {
+  const ranked = computeScores(players, winners);
 
   return (
     <div className="player-scores-panel">
-      <div className="panel-header">
-        <h3>Players</h3>
-        <div className="player-count">{playersWithScores.length} Online</div>
+      <div className="ps-header">
+        <Users size={14} className="ps-header-icon" />
+        <h3>Leaderboard</h3>
+        <div className="ps-count">{ranked.length}/6</div>
       </div>
-      
-      <div className="players-container">
-        {playersWithScores.map((player, index) => {
-          const isActive = currentPlayer?.id === player.id;
-          const rank = getPlayerRank(player.totalScore, index);
-          const displayName = player.name?.length > 10 
-            ? player.name.substring(0, 10) + '...' 
-            : player.name;
-          const isOnline = player.isConnected !== false; // Assume online unless explicitly false
-          
-          return (
-            <motion.div
-              key={player.id}
-              className={`player-card ${rank} ${isActive ? 'active' : ''} ${isOnline ? 'online' : 'offline'}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className="player-info">
-                <div className="player-status">
-                  <div className={`online-indicator ${isOnline ? 'online' : 'offline'}`}></div>
+
+      <div className="ps-list">
+        <AnimatePresence>
+          {ranked.map((player, index) => {
+            const isMe     = player.id === currentPlayer?.id;
+            const rankConf = RANK_CONFIG[index];
+            const hasScore = player.totalScore > 0;
+            const display  = player.name?.length > 10
+              ? player.name.substring(0, 10) + '…'
+              : player.name;
+
+            return (
+              <motion.div
+                key={player.id}
+                layout
+                className={`ps-card ${rankConf?.label ?? 'regular'} ${isMe ? 'me' : ''}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ delay: index * 0.05, layout: { duration: 0.3 } }}
+                whileHover={{ scale: 1.02 }}
+              >
+                {/* Rank badge */}
+                <div
+                  className="ps-rank"
+                  style={{ color: rankConf?.color ?? 'rgba(255,255,255,0.4)' }}
+                >
+                  {rankConf && hasScore ? rankConf.icon : <span className="ps-rank-num">#{index + 1}</span>}
                 </div>
-                
-                <div className="player-name-section">
-                  {rank !== 'regular' && (
-                    <div className="rank-icon">
-                      {getRankIcon(rank)}
-                    </div>
-                  )}
-                  <div className="player-name">
-                    {displayName} [{player.totalScore}]
+
+                {/* Avatar */}
+                <div className="ps-avatar">{player.avatar}</div>
+
+                {/* Name & score */}
+                <div className="ps-info">
+                  <div className="ps-name">
+                    {display}
+                    {isMe && <span className="ps-you">YOU</span>}
+                  </div>
+                  <div className="ps-score" style={{ color: rankConf?.color ?? 'rgba(255,255,255,0.6)' }}>
+                    {player.totalScore > 0 ? `${player.totalScore} pts` : '—'}
                   </div>
                 </div>
-              </div>
-              
-              {isActive && (
-                <motion.div
-                  className="active-glow"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              )}
-            </motion.div>
-          );
-        })}
-      </div>
-      
-      {playersWithScores.length === 0 && (
-        <div className="no-players">
-          <div className="empty-state">
-            <Star size={24} />
-            <p>Waiting for players to join...</p>
+
+                {/* Online dot */}
+                <div className="ps-online" />
+
+                {/* Active player shimmer */}
+                {isMe && <div className="ps-me-glow" />}
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+
+        {/* Empty slots */}
+        {Array.from({ length: Math.max(0, 6 - ranked.length) }).map((_, i) => (
+          <div key={`empty-${i}`} className="ps-card empty">
+            <div className="ps-rank"><span className="ps-rank-num">#{ranked.length + i + 1}</span></div>
+            <div className="ps-avatar ps-avatar-empty">?</div>
+            <div className="ps-info">
+              <div className="ps-name empty-name">Waiting…</div>
+            </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,220 +1,189 @@
-# 🎲 Multiplayer Tambola (Housie) Game
+# 🎱 Tambola Game
 
-A real-time multiplayer Tambola/Housie game built with React, Node.js, and Socket.IO. Players can join game rooms, get unique tickets, and compete for various winning patterns!
+A **real-time multiplayer Tambola (Housie/Bingo)** game built with React + Vite (frontend) and Node.js + Socket.IO (backend).
+
+---
 
 ## ✨ Features
 
-### 🎮 Game Features
-- **Multiplayer Support**: Up to 6 players per game room
-- **Real-time Gameplay**: Live number calling and instant updates
-- **Multiple Winning Patterns**: First Five, Lines, Four Corners, Full House
-- **Instant Validation**: Server-side claim verification
-- **Auto-game Management**: Games start automatically when 6 players join
+| Feature | Details |
+|---------|---------|
+| **Real-time multiplayer** | Up to 6 players via Socket.IO WebSockets |
+| **Auto ticket generation** | Server-side Tambola-compliant 3×9 tickets |
+| **Number calling** | Random draw every 5 seconds |
+| **6 win patterns** | First Five, Top/Middle/Bottom Line, Four Corners, Full House |
+| **Live leaderboard** | Animated score updates as claims are won |
+| **LAN-ready** | Auto-detects server host so mobile devices work on the same network |
+| **Dark premium UI** | Glassmorphic design with smooth framer-motion animations |
+| **Fully responsive** | Works on mobile (360px), tablet, and desktop (1920px+) |
 
-### 🎨 UI Features
-- **Responsive Design**: Works on desktop and mobile
-- **Animated Interactions**: Smooth animations with Framer Motion
-- **Avatar Selection**: Choose from 24+ fun avatars
-- **Real-time Notifications**: Toast messages for game events
-- **Visual Indicators**: Clear marking of called/missed numbers
+---
 
-### 🔧 Technical Features
-- **WebSocket Communication**: Real-time bidirectional communication
-- **Cross-platform**: Web-based, works on any device
-- **Anti-cheating**: Server controls all game logic
-- **Scalable Architecture**: Supports multiple concurrent games
+## 📁 Project Structure
+
+```
+tambola-game/
+├── server/
+│   ├── server.js          # Express + Socket.IO game server
+│   ├── .env.example       # Server env var documentation
+│   └── package.json
+├── src/
+│   ├── components/
+│   │   ├── LandingPage.jsx    # Home / join screen
+│   │   ├── GameScreen.jsx     # Main game layout
+│   │   ├── TambolaBoard.jsx   # 1-90 number grid
+│   │   ├── PlayerTicket.jsx   # Player's 3×9 ticket
+│   │   ├── PlayerScores.jsx   # Live leaderboard
+│   │   ├── ClaimsPanel.jsx    # Pattern claim buttons
+│   │   ├── NotificationSystem.jsx
+│   │   └── AvatarSelector.jsx
+│   ├── context/
+│   │   └── GameContext.jsx    # Global state + Socket.IO handler
+│   ├── App.jsx
+│   ├── App.css                # Design system & global styles
+│   ├── index.css              # Minimal reset
+│   └── main.jsx
+├── .env.example               # Frontend env var documentation
+├── index.html
+└── package.json
+```
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
+- **Node.js** 18+ and **npm** 9+
 
-### Installation
+### 1. Install dependencies
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd tambola-game
-   ```
-
-2. **Install frontend dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Install server dependencies**
-   ```bash
-   cd server
-   npm install
-   cd ..
-   ```
-
-### Running the Application
-
-1. **Start the server** (in one terminal)
-   ```bash
-   cd server
-   npm start
-   ```
-   Server will run on `http://localhost:3001`
-
-2. **Start the frontend** (in another terminal)
-   ```bash
-   npm run dev
-   ```
-   Frontend will run on `http://localhost:5173`
-
-3. **Open multiple browser tabs/windows** to simulate multiple players
-
-## 🎯 How to Play
-
-1. **Join Game**: Enter your nickname and choose an avatar
-2. **Wait for Players**: Game starts when 6 players join
-3. **Mark Numbers**: Click numbers on your ticket as they're called
-4. **Claim Patterns**: Click "Claim" buttons when you complete patterns:
-   - **First Five**: First 5 numbers marked
-   - **Top/Middle/Bottom Line**: Complete any line
-   - **Four Corners**: All corner numbers of your ticket
-   - **Full House**: Complete ticket (ends the game)
-
-## 🏗️ Project Structure
-
-```
-tambola-game/
-├── src/                          # Frontend source
-│   ├── components/              # React components
-│   │   ├── LandingPage.jsx     # Entry page with player setup
-│   │   ├── GameScreen.jsx      # Main game interface
-│   │   ├── TambolaBoard.jsx    # Number calling board
-│   │   ├── PlayerTicket.jsx    # Player's game ticket
-│   │   ├── PlayersList.jsx     # Connected players list
-│   │   ├── ClaimsPanel.jsx     # Winning patterns panel
-│   │   ├── AvatarSelector.jsx  # Avatar selection
-│   │   └── NotificationSystem.jsx # Toast notifications
-│   ├── context/
-│   │   └── GameContext.jsx     # Global state management
-│   ├── App.jsx                 # Main app component
-│   └── main.jsx               # App entry point
-├── server/                     # Backend source
-│   ├── server.js              # Express + Socket.IO server
-│   └── package.json           # Server dependencies
-├── public/                     # Static assets
-└── package.json               # Frontend dependencies
-```
-
-## 🛠️ Technologies Used
-
-### Frontend
-- **React 19** - UI library
-- **Vite** - Build tool and dev server
-- **Socket.IO Client** - Real-time communication
-- **Framer Motion** - Animations and transitions
-- **React Router** - Client-side routing
-- **Lucide React** - Icon library
-
-### Backend
-- **Node.js** - Runtime environment
-- **Express** - Web framework
-- **Socket.IO** - WebSocket communication
-- **UUID** - Unique ID generation
-- **CORS** - Cross-origin resource sharing
-
-## 🎨 Game Rules & Patterns
-
-### Winning Patterns
-1. **First Five** (5 points): Mark any 5 numbers first
-2. **Top Line** (10 points): Complete entire top row
-3. **Middle Line** (10 points): Complete entire middle row  
-4. **Bottom Line** (10 points): Complete entire bottom row
-5. **Four Corners** (15 points): Mark all 4 corner numbers
-6. **Full House** (25 points): Complete entire ticket
-
-### Ticket Structure
-- 3 rows × 9 columns grid
-- Each row has exactly 5 numbers
-- Numbers distributed by columns:
-  - Column 1: 1-9
-  - Column 2: 10-19
-  - Column 3: 20-29
-  - Column 4: 30-39
-  - Column 5: 40-49
-  - Column 6: 50-59
-  - Column 7: 60-69
-  - Column 8: 70-79
-  - Column 9: 80-90
-
-## 🔧 Development
-
-### Development Mode
 ```bash
-# Frontend (with hot reload)
-npm run dev
+# Frontend
+npm install
 
-# Server (with auto-restart)
+# Backend
+cd server && npm install
+```
+
+### 2. Configure environment (optional)
+
+```bash
+# Copy and edit as needed
+cp .env.example .env
+cp server/.env.example server/.env
+```
+
+### 3. Start the server
+
+```bash
+# From the server/ directory
 cd server
-npm run dev  # if you install nodemon
+npm run dev        # nodemon (auto-reload)
+# or
+npm start          # plain node
 ```
 
-### Building for Production
+The server starts on **http://localhost:3001** by default.
+
+### 4. Start the frontend
+
 ```bash
-# Build frontend
-npm run build
-
-# Preview production build
-npm run preview
+# From the project root
+npm run dev
 ```
 
-### Code Quality
-```bash
-# Lint code
-npm run lint
-```
+Open **http://localhost:5173** in your browser.
 
-## 🌟 Features Roadmap
+### 5. Multiplayer on a LAN
 
-- [ ] **Spectator Mode**: Watch ongoing games
-- [ ] **Game History**: View past game results
-- [ ] **Custom Themes**: Different visual themes
-- [ ] **Sound Effects**: Audio feedback for events
-- [ ] **Player Statistics**: Win/loss tracking
-- [ ] **Private Rooms**: Password-protected games
-- [ ] **Tournament Mode**: Multi-round competitions
-- [ ] **Mobile App**: Native iOS/Android apps
+1. Find your machine's local IP: `ipconfig` (Windows) or `ip a` (Linux/macOS)
+2. Open the game URL on other devices using your IP, e.g. `http://192.168.1.10:5173`
+3. No extra config needed — the frontend auto-connects to the correct server host.
+
+---
+
+## 🎮 How to Play
+
+1. **Enter your name** and pick an avatar on the landing page.
+2. Click **Enter Arena** — you'll be placed in a game lobby.
+3. Once **6 players** have joined, the game starts automatically.
+   - The **host** (first to join) can also click **Start Game** to begin early.
+4. Numbers are called every **5 seconds** — click them on your ticket to mark.
+5. When you complete a pattern, click **Claim** in the Claims panel.
+6. The server validates your claim instantly and awards points.
+7. The game ends when **Full House** is claimed.
+
+### Win Patterns & Points
+
+| Pattern | Points | Rule |
+|---------|--------|------|
+| First Five | 100 | Mark any 5 numbers first |
+| Top Line | 150 | Complete first row |
+| Middle Line | 150 | Complete middle row |
+| Bottom Line | 150 | Complete bottom row |
+| Four Corners | 200 | Mark the 4 corner numbers |
+| Full House | 500 | Mark all 15 numbers on your ticket |
+
+> Points are split equally among multiple winners of the same pattern.
+
+---
+
+## ⚙️ Environment Variables
+
+### Frontend (`.env`)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VITE_SOCKET_URL` | Auto-detected | Override Socket.IO server URL |
+
+### Backend (`server/.env`)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | `3001` | Server port |
+| `MIN_PLAYERS` | `6` | Players required to auto-start |
+
+---
+
+## 🔧 Available Scripts
+
+### Frontend (root)
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start Vite dev server |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint check |
+| `npm run preview` | Preview production build |
+
+### Backend (`server/`)
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start with nodemon (auto-reload) |
+| `npm start` | Start with plain node |
+
+---
+
+## 🛠️ API & Health Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Server uptime & status |
+| `/api/status` | GET | Active games & player count |
+
+---
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m "Add my feature"`
+4. Push: `git push origin feature/my-feature`
 5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🎉 Acknowledgments
-
-- Built with ❤️ for the love of Tambola/Housie
-- Inspired by traditional Indian Housie games
-- Thanks to the open-source community for amazing tools
 
 ---
 
-**Have fun playing Tambola! 🎲🎯**+ Vite
+## 📄 License
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+MIT
