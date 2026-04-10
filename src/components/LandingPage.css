@@ -943,22 +943,49 @@
 
 @media (max-width: 640px) {
   .premium-3d-title {
-    font-size: clamp(48px, 12vw, 72px);
+    font-size: clamp(40px, 12vw, 64px);
+    letter-spacing: -1px;
+    filter: drop-shadow(1px 1px 0 #1e40af) drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.6));
   }
   
-  .pool-ball {
-    width: 45px;
-    height: 45px;
+  /* Hide excessive background clutter on mobile */
+  .pink-ticket, .green-ticket, .yellow-ticket,
+  .orange-ticket, .purple-ticket, .teal-ticket, .red-ticket, .indigo-ticket {
+    display: none !important;
   }
   
-  .premium-ticket {
-    width: 100px;
-    height: 60px;
+  /* Keep only one subtle background ticket */
+  .blue-ticket {
+    width: 90px;
+    height: 55px;
+    bottom: 10%;
+    left: 10%;
+    opacity: 0.4;
   }
+
+  /* Reduce pool balls */
+  .ball-2, .ball-4, .ball-5, .ball-6 {
+    display: none !important;
+  }
+
+  .ball-1 { top: 10%; right: 10%; width: 40px; height: 40px; }
+  .ball-3 { bottom: 20%; right: 15%; width: 35px; height: 35px; }
   
   .lp-badges-row {
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
+  }
+  
+  .lp-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .lp-status-pill {
+    padding: 4px 10px;
+    font-size: 10px;
   }
 }
 

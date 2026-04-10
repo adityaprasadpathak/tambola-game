@@ -58,18 +58,18 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  padding: 12px 24px;
+  padding: 8px 20px;
   background: var(--bg-card);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-sm);
-  height: 60px;
+  height: 52px;
   position: relative;
   z-index: 2;
 }
 
 .game-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
@@ -100,7 +100,7 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  height: calc(100vh - 60px - 32px);
+  height: calc(100vh - 52px - 32px);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -115,7 +115,7 @@
 
 .game-layout {
   display: grid;
-  grid-template-columns: 1.2fr 1.2fr minmax(200px, 1fr) 250px;
+  grid-template-columns: 1.1fr 1.3fr minmax(200px, 1fr) 240px;
   gap: 16px;
   width: 100%;
   height: 100%;
@@ -129,7 +129,7 @@
 .claims-panel-section {
   background: var(--bg-card);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 12px;
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-md);
   position: relative;
@@ -137,7 +137,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 0;
+  min-height: 100px;
 }
 
 /* Compact global overrides for panel children */
@@ -231,7 +231,7 @@
 .gc-pattern-name { font-weight: 500; color: var(--text-primary); text-transform: capitalize; }
 .gc-pattern-winner { color: var(--text-secondary); text-align: right; margin-left: auto; }
 
-/* ── Responsive ─────────────────────────────────────────── */
+/* ── Responsive Refinements ─────────────────────────────── */
 @media (max-width: 1200px) {
   .game-layout {
     grid-template-columns: 1fr 1fr;
@@ -239,9 +239,9 @@
     height: auto;
     gap: 16px;
   }
-  .game-layout-scale, .game-layout-scale.scaled {
+  .game-layout-scale {
     height: auto;
-    transform: none;
+    transform: none !important;
     overflow: visible;
   }
 }
@@ -258,25 +258,46 @@
     height: auto;
     gap: 16px;
   }
-  .game-layout-scale, .game-layout-scale.scaled {
-    height: auto;
-    transform: none !important;
-    overflow: visible;
-  }
 }
 
 @media (max-width: 768px) {
   .game-screen { padding: 12px; }
-  .game-header { flex-direction: column; height: auto; gap: 12px; padding: 16px; text-align: center; }
-  .game-title { font-size: 18px; }
-  .game-status { justify-content: center; flex-wrap: wrap; }
+  .game-header { 
+    flex-direction: row; /* Keep horizontal on tablets if possible */
+    height: auto; 
+    gap: 12px; 
+    padding: 12px 16px; 
+  }
+  .game-title { font-size: 16px; }
+  .game-status { justify-content: flex-end; }
+  .status-badge { padding: 4px 10px; font-size: 10px; }
 }
 
 @media (max-width: 480px) {
   .game-screen { padding: 8px; }
-  .center-panel { order: 1; }
-  .left-panel { order: 2; }
-  .claims-panel-section { order: 3; }
-  .right-panel { order: 4; }
-  .left-panel, .center-panel, .right-panel, .claims-panel-section { padding: 12px; }
+  .game-header { 
+    flex-direction: column; 
+    text-align: center;
+    padding: 12px;
+  }
+  .game-status { justify-content: center; width: 100%; }
+  
+  /* Priority ordering for mobile */
+  .center-panel { order: 1; } /* My Ticket */
+  .left-panel { order: 2; }   /* Board */
+  .claims-panel-section { order: 3; } /* Claims */
+  .right-panel { order: 4; }  /* Leaderboard */
+  
+  .left-panel, .center-panel, .right-panel, .claims-panel-section { 
+    padding: 10px; 
+    border-radius: var(--radius-sm);
+    min-height: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .game-screen { padding: 4px; }
+  .game-header { padding: 8px; margin-bottom: 8px; }
+  .game-title { font-size: 14px; }
+  .game-layout { gap: 10px; }
 }

@@ -23,15 +23,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 16px 0 20px 0;
-  padding: 16px 0;
+  margin: 10px 0 14px 0;
+  padding: 10px 0;
   position: relative;
-  min-height: 110px;
+  min-height: 90px;
 }
 
 .pool-ball-number {
-  width: 90px;
-  height: 90px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@
 }
 
 .ball-number {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 800;
   color: var(--highlight);
   font-family: var(--font-base);
@@ -73,7 +73,7 @@
 .numbers-grid { 
   display: grid; 
   grid-template-columns: repeat(10, 1fr); 
-  grid-auto-rows: minmax(26px, 1fr); /* replace fixed 9 rows with auto */
+  grid-auto-rows: minmax(26px, 1fr);
   gap: 4px; 
   flex: 1; 
   min-height: 0; 
@@ -121,7 +121,7 @@
   display: flex;
   justify-content: space-around;
   margin: 16px 0 12px 0;
-  padding: 12px;
+  padding: 8px;
   background: var(--bg-secondary);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-light);
@@ -138,7 +138,7 @@
 
 .stat-value {
   display: block;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--primary);
 }
@@ -179,19 +179,30 @@
 }
 
 @media (max-width: 768px) {
-  .tambola-board { height: auto; flex: 0 0 auto; }
-  .current-number-display { min-height: 90px; margin: 12px 0; padding: 12px 0; }
-  .pool-ball-number { width: 70px; height: 70px; }
-  .ball-number { font-size: 28px; }
+  .tambola-board { height: auto; flex: 0 0 auto; min-height: auto; }
+  .current-number-display { min-height: 80px; margin: 8px 0; padding: 10px 0; }
+  .pool-ball-number { width: 64px; height: 64px; }
+  .ball-number { font-size: 24px; }
   .numbers-grid { display: none !important; }
-  .recent-numbers { display: none !important; }
-  .board-stats { padding: 10px; gap: 15px; }
+  .recent-numbers { display: block !important; margin-top: 12px; min-height: 60px; padding-top: 8px; }
+  .recent-list { gap: 6px; }
 }
 
 @media (max-width: 480px) {
-  .board-header { margin-bottom: 8px; }
-  .current-number-display { min-height: 80px; padding: 8px 0; }
-  .pool-ball-number { width: 60px; height: 60px; border-width: 3px; }
-  .ball-number { font-size: 24px; }
-  .board-stats { padding: 8px; gap: 12px; }
+  .board-header { margin-bottom: 4px; padding-bottom: 4px; }
+  .board-header h2 { font-size: 14px; }
+  .current-number-display { min-height: 70px; padding: 5px 0; }
+  .pool-ball-number { width: 56px; height: 56px; border-width: 2px; }
+  .ball-number { font-size: 20px; }
+  .board-stats { padding: 8px; margin: 8px 0; }
+  .stat-value { font-size: 14px; }
+  .recent-number { width: 24px; height: 24px; font-size: 10px; }
+}
+
+@media (max-width: 360px) {
+  .current-number-display { min-height: 60px; }
+  .pool-ball-number { width: 48px; height: 48px; }
+  .ball-number { font-size: 18px; }
+  .board-stats { gap: 6px; padding: 4px; }
+  .stat-label { font-size: 10px; }
 }

@@ -8,8 +8,8 @@
   border-top: 4px solid var(--primary);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: 16px;
-  margin: 8px;
+  padding: 12px;
+  margin: 6px;
 }
 
 .loading-ticket {
@@ -88,8 +88,8 @@
   flex-direction: column; 
   gap: 8px; 
   background: var(--bg-secondary);
-  padding: 16px; 
-  margin: 12px 0;
+  padding: 12px; 
+  margin: 8px 0;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
 }
@@ -110,7 +110,7 @@
   font-weight: 600; 
   font-size: 14px; 
   color: var(--text-primary); 
-  min-height: 32px;
+  min-height: 30px;
 }
 
 .player-ticket .ticket-cell.empty {
@@ -229,7 +229,8 @@
 .ticket-instructions p { margin: 0; }
 
 @media (max-width: 768px) {
-  .ticket-grid { padding: 12px; gap: 6px; }
+  .player-ticket { margin: 4px; padding: 12px; }
+  .ticket-grid { padding: 10px; gap: 6px; }
   .ticket-row { gap: 4px; }
   .ticket-cell { font-size: 12px; min-height: 28px; }
   .check-mark, .warning-mark { width: 16px; height: 16px; font-size: 10px; top: -4px; right: -4px; }
@@ -237,10 +238,23 @@
 }
 
 @media (max-width: 480px) {
-  .ticket-header h2 { font-size: 15px; }
-  .ticket-grid { padding: 8px; gap: 4px; margin: 8px 0; }
-  .ticket-row { gap: 4px; }
+  .player-ticket { margin: 2px; padding: 8px; border-radius: var(--radius-md); }
+  .ticket-header h2 { font-size: 14px; margin-bottom: 8px; }
+  .ticket-legend { gap: 8px; }
+  .legend-item { font-size: 10px; }
+  .ticket-grid { padding: 6px; gap: 4px; margin: 4px 0; border-radius: var(--radius-sm); }
+  .ticket-row { gap: 3px; }
   .ticket-cell { font-size: 11px; min-height: 24px; border-radius: 4px; }
-  .stat-value { font-size: 14px; }
-  .ticket-instructions { font-size: 11px; padding: 8px; }
+  .stat-value { font-size: 13px; }
+  .stat-label { font-size: 10px; }
+  .ticket-instructions { font-size: 10px; padding: 6px; }
+}
+
+@media (max-width: 360px) {
+  .player-ticket { padding: 4px; }
+  .ticket-grid { padding: 4px; gap: 2px; }
+  .ticket-row { gap: 2px; }
+  .ticket-cell { font-size: 10px; min-height: 20px; border-radius: 2px; }
+  .stat-value { font-size: 12px; }
+  .ticket-stats { gap: 4px; padding: 4px; }
 }
